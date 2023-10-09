@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -13,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.category.index');
     }
 
     /**
@@ -23,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
@@ -34,7 +35,24 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(
+            [
+                "tentheloai" => 'required|unique:category|max:255',
+                "mota" => 'required|max:255',
+                "kichhoat" => 'required|max:255',
+            ],
+            [
+                'tentheloai.required' => 'Phải có tên thể loại',
+                'mota.required' => 'Phải có mô tả thể loại',
+            ]
+        );
+        $data = $request->all();
+        $theloai = new Category();
+        $theloai->tentheloai = $data['tentheloai'];
+        $theloai->mota = $data['mota'];
+        $theloai->kichhoat = $data['kichhoat'];
+        $theloai->save();
+        return redirect()->back()->with('status', 'Thêm thành công');
     }
 
     /**
@@ -56,7 +74,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.category.edit');
     }
 
     /**
